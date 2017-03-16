@@ -1,23 +1,8 @@
-const deal = {
-    title: 'Auto AHB352 diil',
-    value: 244,
-    valueFormatted: '244 €',
-
-    // viewing customer
-    organization: {},
-    person: {},
-
-    // who manages sales
-    owner: {
-        name: '',
-        photo: '',
-        phone: '',
-        email: ''
-    }
-}
-
-exports.findDeal = (trackingCode) => new Promise((resolve, reject) => {
+exports.resolveTrackingCode = (trackingCode) => new Promise((resolve, reject) => {
     setTimeout(() => {
-        resolve(deal);
+        resolve({
+            dealId: 21,
+            apiToken: '6ce5c6c5f424e56e891cda15422a9ab66831fe79'
+        });
     }, 100);
 });
