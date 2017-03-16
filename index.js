@@ -33,7 +33,7 @@ router.get('/:trackingCode', function* (next) {
         const data = {
             company: {
                 name: 'Paint Brothers Inc',
-                logo: 'https://dl.dropboxusercontent.com/u/20705/logo.png?dl=1'
+                // logo: 'https://dl.dropboxusercontent.com/u/20705/logo.png?dl=1'
             },
             deal: {
                 title: 'Repair Audi AFG332',

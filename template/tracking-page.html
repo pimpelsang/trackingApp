@@ -14,7 +14,9 @@
     <div class="ui segment">
         <div class="ui two column grid">
             <div class="three wide column">
+                {{#if company/logo}}
                 <img class="ui fluid image" src="{{company/logo}}">
+                {{/if}}
                 <div class="ui card">
                     <div class="image">
                         <img src="http://semantic-ui.com/images/avatar2/large/matthew.png">
@@ -42,7 +44,8 @@
                 </div>
 
                 <div class="ui segment">
-                    <p>Your contact information</p>
+                    <p>Customer information</p>
+                    <b>{{customer/name}}</b>
                     <div class="ui list">
                         <div class="item">
                             <a>
