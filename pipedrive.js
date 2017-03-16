@@ -36,18 +36,58 @@ const demoData = {
     ]
 };
 
-exports.gatherData = (dealId, apiToken) => new Promise((resolve, reject) => {
-    // const pipedrive = new Pipedrive.Client(apiToken, { strictMode: true });
+exports.gatherData = function* (dealId, apiToken) {
+    const pipedrive = new Pipedrive.Client(apiToken);
 
-    // const deal = yield promisify(pipedrive.Deals.get)(dealId);
-    // const stages = yield promisify(pipedrive.Stages.getAll)(deal.pipeline_id);
-    // const owner = yield promisify(pipedrive.User.get)(deal.user_is);
+    // load all information
+    const deal = yield promisify(pipedrive.Deals.get)(dealId);
+    const stages = yield promisify(pipedrive.Stages.getAll)(deal.pipeline_id);
+    const owner = deal.user_id;
+    const customer = deal.person_id || deal.org_id; 
 
-    // if (deal.person_id) {
-    //     const customer = yield promisify(pipedrive.Person.get)(deal.person_id);
-    // } else {
-    //     const customer = yield promisify(pipedrive.Organization.get)(deal.org_id);
-    // }
+    // create limited data object
+    return {
+        company: {
+            name: 'Paint Brothers Inc',
+            // logo: 'https://dl.dropboxusercontent.com/u/20705/logo.png?dl=1'
+        },
+        deal: {
+            title: deal.title,
+            value: deal.valueFormatted,
+            state: 'Drying'
+        },
+        customer: {
+            name: customer.name,
+            phone: pickFirst(customer.phone),
+            email: pickFirst(customer.email)
+        },
+        owner: {
+            name: owner.name,
+            phone: owner.phone,
+            email: owner.email
+        },
+        states: formatStates(stages, deal),
+        notes: [
+            { text: 'This is just a note from mechanic' },
+            { image: 'http://www.ismautorepair.com/graphics/photos/shop-photos/auto-repair-gallery-01/photos/774/006.jpg' },
+            { image: 'http://www.ismautorepair.com/graphics/photos/shop-photos/auto-repair-gallery-01/photos/774/009.jpg' },
+        ]
+    };
+};
 
-    resolve(demoData);
-});
+function formatStates(allStages, deal) {
+    const stages = allStages.filter(stage => stage.pipeline_id === deal.pipeline_id);
+    const activeIndex = stages.findIndex(stage => stage.id === deal.stage_id);
+
+    return stages.map((stage, i) => ({
+        name: stage.name,
+        start: i === activeIndex ? deal.stage_change_time : null,
+        active: i === activeIndex,
+        done: i < activeIndex,
+        upcoming: i > activeIndex
+    }));
+}
+
+function pickFirst(phone) {
+    return phone && phone.length ? phone[0].value : null;
+}

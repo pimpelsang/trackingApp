@@ -13,10 +13,11 @@
 <body>
     <div class="ui segment">
         <div class="ui two column grid">
-            <div class="three wide column">
+            <div class="four wide column">
                 {{#if company/logo}}
-                <img class="ui fluid image" src="{{company/logo}}">
-                {{/if}}
+                <img class="ui fluid image" src="{{company/logo}}"> {{/if}}
+
+                <!--owner-->
                 <div class="ui card">
                     <div class="image">
                         <img src="http://semantic-ui.com/images/avatar2/large/matthew.png">
@@ -24,85 +25,92 @@
                     <div class="content">
                         <a class="header">Contact: {{owner/name}}</a>
                         <div class="description">
-                            {{owner/name}} is your contact at {{company/name}}.
+                            {{owner/name}} is your contact.
                         </div>
                     </div>
                     <div class="extra content">
                         <div class="ui list">
+                            {{#if owner/email}}
                             <div class="item">
                                 <a>
                                     <i class="mail icon"></i> {{owner/email}}
                                 </a>
                             </div>
+                            {{/if}} {{#if owner/phone}}
                             <div class="item">
                                 <a>
                                     <i class="phone icon"></i> {{owner/phone}}
                                 </a>
                             </div>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
 
-                <div class="ui segment">
-                    <p>Customer information</p>
-                    <b>{{customer/name}}</b>
-                    <div class="ui list">
-                        <div class="item">
-                            <a>
-                                <i class="mail icon"></i> {{customer/email}}
-                            </a>
+                <!--customer-->
+                <div class="ui card">
+                    <div class="content">
+                        <a class="header">Customer information</a>
+                        <div class="description">
+                            {{customer/name}}
                         </div>
-                        <div class="item">
-                            <a>
-                                <i class="phone icon"></i> {{customer/phone}}
-                            </a>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui list">
+                            {{#if customer/email}}
+                            <div class="item">
+                                <a>
+                                    <i class="mail icon"></i> {{customer/email}}
+                                </a>
+                            </div>
+                            {{/if}} {{#if customer/phone}}
+                            <div class="item">
+                                <a>
+                                    <i class="phone icon"></i> {{customer/phone}}
+                                </a>
+                            </div>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="column">
-                <h1>{{deal/title}} - <i>{{deal/value}}</i></h1>
+                <h1>{{deal/title}} <i>{{deal/value}}</i></h1>
 
-                <h3 class="ui header">Work log:</h3>
-                <div class="ui vertical steps">
-                    {{#each states}} 
-                        {{#if active}}
-                        <div class="active step">
-                            <i class="configure icon"></i>
-                            <div class="content">
-                                <div class="title">{{name}}</div>
-                                <div class="description">{{start}}</div>
-                            </div>
+                <div class="ui steps">
+                    {{#each states}} {{#if active}}
+                    <div class="active step">
+                        <i class="configure icon"></i>
+                        <div class="content">
+                            <div class="title">{{name}}</div>
+                            <div class="description">Since {{start}}</div>
                         </div>
-                        {{/if}}
-                        {{#if done}}
-                        <div class="completed step">
-                            <i class="icon"></i>
-                            <div class="content">
-                                <div class="title">{{name}}</div>
-                                <div class="description">{{start}}</div>
-                            </div>
-                        </div>
-                        {{/if}}
-                        {{#if upcoming}}
-                        <div class="disabled step">
-                            <div class="content">
-                                <div class="title">{{name}}</div>
-                            </div>
-                        </div>
-                        {{/if}} 
-                    {{/each}}
                     </div>
-
-                    {{#if notes}}
-                    <h3 class="ui header">Attached notes:</h3>
-                    {{#each notes}} {{#if image}}
-                    <img class="ui large rounded image" src="{{image}}"> {{else}}
-                    <p class="ui warning message">{{text}}</p>
-                    {{/if}} {{/each}} {{/if}}
+                    {{/if}} {{#if done}}
+                    <div class="completed step">
+                        <i class="icon"></i>
+                        <div class="content">
+                            <div class="title">{{name}}</div>
+                        </div>
+                    </div>
+                    {{/if}} {{#if upcoming}}
+                    <div class="disabled step">
+                        <div class="content">
+                            <div class="title">{{name}}</div>
+                        </div>
+                    </div>
+                    {{/if}} {{/each}}
                 </div>
+
+                {{#if notes}}
+                <h3 class="ui header">Attached notes:</h3>
+                {{#each notes}} {{#if image}}
+                <img class="ui large rounded image" src="{{image}}"> {{else}}
+                <p class="ui warning message">{{text}}</p>
+                {{/if}} {{/each}} {{/if}}
             </div>
         </div>
+    </div>
 </body>
 
 </html>

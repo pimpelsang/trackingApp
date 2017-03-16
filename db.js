@@ -4,7 +4,5 @@ const demoResponse = {
 };
 
 exports.resolveTrackingCode = (trackingCode) => new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve(demoResponse);
-    }, 100);
+    resolve(demoResponse);
 });
