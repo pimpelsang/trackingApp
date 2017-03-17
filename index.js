@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const KoaRouter = require('koa-router');
+const KoaBodyParser = require('koa-bodyparser');
 
 const template = require('./template');
 const db = require('./db');
@@ -10,12 +11,25 @@ router.get('/', function* (next) {
     this.body = 'Hi, I am tracking service!';
 })
 
+router.get('/setup', function* (next) {
+    this.body = yield template.render('setup');
+})
+
+router.post('/setup', function* (next) {
+    const apiToken = this.request.body.apiToken;
+    const pipelineId = yield pipedrive.createPipeline(apiToken);
+
+    yield db.storeIntegration(apiToken, pipelineId);
+
+    this.body = yield template.render('setup', { pipelineId });
+})
+
 router.get('/:trackingCode', function* (next) {
     try {
-        const {dealId, apiToken} = yield db.resolveTrackingCode(this.params.trackingCode);
-        const data = yield pipedrive.gatherData(dealId, apiToken);
+        const { dealId, apiToken } = yield db.resolveTrackingCode(this.params.trackingCode);
+        const data = yield pipedrive.gatherDealData(dealId, apiToken);
 
-        this.body = template.render(data);
+        this.body = yield template.render('tracking-page', data);
     }
     catch (err) {
         console.log(err);
@@ -24,5 +38,6 @@ router.get('/:trackingCode', function* (next) {
 })
 
 const app = new Koa();
+app.use(KoaBodyParser());
 app.use(router.routes());
 app.listen(8080);
